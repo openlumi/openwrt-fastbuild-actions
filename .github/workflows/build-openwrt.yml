@@ -15,6 +15,7 @@ env:
   DK_PASSWORD: ${{secrets.docker_password}}
   SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
   TMATE_ENCRYPT_PASSWORD: ${{secrets.TMATE_ENCRYPT_PASSWORD}}
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 name: Build OpenWrt
 
