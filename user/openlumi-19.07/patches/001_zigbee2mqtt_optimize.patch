@@ -1,0 +1,65 @@
+--- package/feeds/node/node-zigbee2mqtt/Makefile
++++ package/feeds/node/node-zigbee2mqtt/Makefile
+@@ -44,9 +44,7 @@
+
+ TARGET_CFLAGS+=$(FPIC)
+ TARGET_CPPFLAGS+=$(FPIC)
+-
+-define Build/Compile
+-	$(MAKE_VARS) \
++NPM_FLAGS=$(MAKE_VARS) \
+ 	$(MAKE_FLAGS) \
+ 	npm_config_arch=$(NODEJS_CPU) \
+ 	npm_config_target_arch=$(NODEJS_CPU) \
+@@ -54,19 +52,35 @@
+ 	npm_config_nodedir=$(STAGING_DIR)/usr/ \
+ 	npm_config_prefix=$(PKG_INSTALL_DIR)/usr/ \
+ 	npm_config_cache=$(TMP_DIR)/npm-cache-$(TMPNPM) \
+-	npm_config_tmp=$(TMP_DIR)/npm-tmp-$(TMPNPM) \
+-	npm install -g --production $(PKG_BUILD_DIR)
++	npm_config_tmp=$(TMP_DIR)/npm-tmp-$(TMPNPM)
++
++define Build/Compile
++	mkdir -p $(TMP_DIR)/modclean
++	$(NPM_FLAGS) npm i modclean --prefix=$(TMP_DIR)/modclean
++	$(NPM_FLAGS) npm i -g --production $(PKG_BUILD_DIR)
++	$(NPM_FLAGS) npm ci --production --prefix=$(PKG_BUILD_DIR)/
+ 	rm $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman/npm-shrinkwrap.json
+ 	rm $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman-converters/npm-shrinkwrap.json
+ 	rm -f $(PKG_BUILD_DIR)/node_modules/zigbee2mqtt-frontend/dist/report.html
+ 	rm -f $(PKG_BUILD_DIR)/node_modules/zigbee2mqtt-frontend/dist/*.map
+ 	rm -f $(PKG_BUILD_DIR)/node_modules/zigbee2mqtt-frontend/dist/*/*.map
++	rm -rf $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman-converters/node_modules/zigbee-herdsman/
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/min
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/src
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/locale
++
++	$(TMP_DIR)/modclean/node_modules/.bin/modclean --no-progress -r --patterns="default:safe" \
++    	    --additional-patterns="*.d.ts" \
++    	    --path $(PKG_BUILD_DIR) --ignore="examples,example*"
++
+ 	rm -rf $(TMP_DIR)/npm-tmp-$(TMPNPM)
+ 	rm -rf $(TMP_DIR)/npm-cache-$(TMPNPM)
+ endef
++
++define Package/node-zigbee2mqtt/conffiles
++/etc/zigbee2mqtt/configuration.yaml
++/etc/zigbee2mqtt/
++endef
+
+ define Package/node-zigbee2mqtt/install
+ 	$(INSTALL_DIR) $(1)/opt/$(PKG_NPM_NAME)
+@@ -80,11 +94,8 @@
+ 		$(1)/opt/$(PKG_NPM_NAME)/
+ 	$(INSTALL_DIR) $(1)/etc/init.d
+ 	$(INSTALL_BIN) ./files/zigbee2mqtt.init $(1)/etc/init.d/zigbee2mqtt
+-endef
+-
+-define Package/node-zigbee2mqtt/postrm
+-#!/bin/sh
+-rm -rf /opt/zigbee2mqtt || true
++	$(INSTALL_DIR) $(1)/etc/zigbee2mqtt
++	$(INSTALL_CONF) ./files/configuration.yaml $(1)/etc/zigbee2mqtt/configuration.yaml
+ endef
+
+ $(eval $(call BuildPackage,node-zigbee2mqtt))
