@@ -58,7 +58,7 @@ jobs:
         # ########### Add your target name below ###########
         # E.g. target: [x86_64, wdr4310v1]
         target:
-          - openlumi-19.07
+          - openlumi-19.07.7
         include:
         - mode: normal
           title: Build
@@ -164,14 +164,6 @@ jobs:
         TMATE_DOCKER_CONTAINER: ${{env.BUILDER_CONTAINER_ID}}
       uses: tete1030/safe-debugger-action@dev
 
-    - name: Upload builder
-      if: |
-        env.SKIP_TARGET == '0' && !cancelled() && (
-          job.status == 'success'
-          || env.OPT_PUSH_WHEN_FAIL == '1'
-        )
-      run: scripts/cisteps/build-openwrt/13-upload_builder.sh
-
     # - name: Upload bin directory
     #   uses: actions/upload-artifact@master
     #   if: env.SKIP_TARGET == '0' && !cancelled()
@@ -211,7 +203,7 @@ jobs:
       if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
       run: |
         mkdir -p ${{ env.HOST_WORK_DIR }}/releases/${{env.BUILD_TARGET}}
-        cp -r ${{env.HOST_BIN_DIR}} ${{ env.HOST_WORK_DIR }}/releases/${{env.BUILD_TARGET}}
+        cp -r ${{env.HOST_BIN_DIR}}/* ${{ env.HOST_WORK_DIR }}/releases/${{env.BUILD_TARGET}}
 
     - name: Commit files
       if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
@@ -233,6 +225,15 @@ jobs:
 #        branch: pr-pages
 #        base: gh-pages
 #        title: 'Updates files from latest Actions build'
+
+
+    - name: Upload builder
+      if: |
+        env.SKIP_TARGET == '0' && !cancelled() && (
+          job.status == 'success'
+          || env.OPT_PUSH_WHEN_FAIL == '1'
+        )
+      run: scripts/cisteps/build-openwrt/13-upload_builder.sh
 
     # failure checking
     - name: '[Failure/Debug] wait for SSH connection (timeout 30min. You are safe to cancel the job now.)'

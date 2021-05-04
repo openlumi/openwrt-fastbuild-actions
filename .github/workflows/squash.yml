@@ -37,7 +37,7 @@ jobs:
           - normal
           - test
         target:
-          - openlumi-19.07
+          - openlumi-19.07.7
         include:
           - mode: normal
             title: Squashing builder
