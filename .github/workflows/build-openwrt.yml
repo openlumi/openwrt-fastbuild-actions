@@ -198,6 +198,40 @@ jobs:
         name: OpenWrt_packages_${{env.BUILD_TARGET}}
         path: ${{env.HOST_BIN_DIR}}
 
+    - name: Checkout tools repo
+      uses: actions/checkout@v2
+      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        repository: openlumi/releases
+        path: ${{ env.HOST_WORK_DIR }}/releases
+        ref: gh-pages
+        token:  ${{ secrets.GH_TOKEN }}
+
+    - name: Copy files into Git branch
+      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
+      run: cp -r ${{env.HOST_BIN_DIR}} ${{ env.HOST_WORK_DIR }}/releases
+
+    - name: Commit files
+      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
+      run: |
+        cd ${{ env.HOST_WORK_DIR }}/releases
+        git status
+        git add -A
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "Updates files from latest Actions build" -a
+        git push
+
+#    - name: Create Pull Request
+#      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
+#      uses: peter-evans/create-pull-request@v3
+#      with:
+#        token: ${{ secrets.GH_TOKEN }}
+#        path: ${{ env.HOST_WORK_DIR }}/releases
+#        branch: pr-pages
+#        base: gh-pages
+#        title: 'Updates files from latest Actions build'
+
     # failure checking
     - name: '[Failure/Debug] wait for SSH connection (timeout 30min. You are safe to cancel the job now.)'
       if: |
