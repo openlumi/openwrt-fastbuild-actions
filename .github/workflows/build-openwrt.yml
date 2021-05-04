@@ -209,7 +209,9 @@ jobs:
 
     - name: Copy files into Git branch
       if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
-      run: cp -r ${{env.HOST_BIN_DIR}} ${{ env.HOST_WORK_DIR }}/releases
+      run: |
+        mkdir -p ${{ env.HOST_WORK_DIR }}/releases/${{env.BUILD_TARGET}}
+        cp -r ${{env.HOST_BIN_DIR}} ${{ env.HOST_WORK_DIR }}/releases/${{env.BUILD_TARGET}}
 
     - name: Commit files
       if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
