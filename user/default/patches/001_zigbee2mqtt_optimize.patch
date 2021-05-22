@@ -1,11 +1,5 @@
-Index: feeds/node/node-zigbee2mqtt/Makefile
-IDEA additional info:
-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
-<+>UTF-8
-===================================================================
-diff --git a/feeds/node/node-zigbee2mqtt/Makefile b/feeds/node/node-zigbee2mqtt/Makefile
---- a/feeds/node/node-zigbee2mqtt/Makefile	(date 1621714900721)
-+++ b/feeds/node/node-zigbee2mqtt/Makefile	(date 1621714900721)
+--- package/feeds/node/node-zigbee2mqtt/Makefile
++++ package/feeds/node/node-zigbee2mqtt/Makefile
 @@ -44,9 +44,7 @@
 
  TARGET_CFLAGS+=$(FPIC)
