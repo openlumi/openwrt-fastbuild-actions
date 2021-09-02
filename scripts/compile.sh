@@ -25,7 +25,7 @@ compile() {
     if [ "x${MODE}" = "xm" ]; then
       local nthread=$(($(nproc) + 1))
       echo "${nthread} thread compile: $*"
-      IGNORE_ERRORS="n m"  make -i -j${nthread} "$@"
+      make -j${nthread} "$@"
     elif [ "x${MODE}" = "xs" ]; then
       echo "Fallback to single thread compile: $*"
       make -j1 V=s "$@"
