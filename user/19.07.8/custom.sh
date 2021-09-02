@@ -2,6 +2,7 @@
 
 mv .config .config.diff
 cp config_xiaomi_lumi .config
+echo "CONFIG_ALL_KMODS=y" >> .config
 cat .config.diff >> .config
 
 mkdir -p files
