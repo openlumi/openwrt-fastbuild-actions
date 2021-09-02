@@ -7,20 +7,23 @@
 
 env:
   # DO NOT CHANGE the following here, set them only in forked repo's Settings->Secrets page
-  # You don't need to set docker_registry if you are using the default Docker Hub
-  # 安全起见以下参数请不要在此更改，在你Fork的repo中，Settings->Secrets页面更改
-  # 如果你想使用默认的Docker Hub，你不需要在secrets页面设置docker_registry
+  # You don't need to set docker_registry if you are using the default Docker Hub Settings->Secrets
   DK_REGISTRY: ${{secrets.docker_registry}}
   DK_USERNAME: ${{secrets.docker_username}}
   DK_PASSWORD: ${{secrets.docker_password}}
   SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
   TMATE_ENCRYPT_PASSWORD: ${{secrets.TMATE_ENCRYPT_PASSWORD}}
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  OPT_UPDATE_FEEDS: 1
 
 name: Build OpenWrt
 
 on:
   deployment:
   repository_dispatch:
+  workflow_dispatch:
+    env:
+      OPT_DEBUG: 1
   push:
     paths:
     - 'user/**'
@@ -39,6 +42,7 @@ jobs:
     if: |
       github.event_name == 'push'
       || github.event_name == 'repository_dispatch'
+      || github.event_name == 'workflow_dispatch'
       || github.event_name == 'deployment'
       || (github.event_name == 'watch' && github.event.action == 'started' && github.event.repository.owner.id == github.event.sender.id)
       || github.event_name == 'schedule'
@@ -51,7 +55,13 @@ jobs:
           - test
         # ########### Add your target name below ###########
         # E.g. target: [x86_64, wdr4310v1]
-        target: []
+        target:
+          - 19.07.7
+          - 19.07.8
+          - 21.02.0-rc4--dgnwg05lm
+          - 21.02.0-rc4--zhwg11lm
+          - snapshot--dgnwg05lm
+          - snapshot--zhwg11lm
         include:
         - mode: normal
           title: Build
@@ -78,12 +88,16 @@ jobs:
       if: env.SKIP_TARGET == '0' && env.TEST != '1'
       run: scripts/cisteps/build-openwrt/03-clean_up.sh
 
+      # https://github.com/docker/setup-qemu-action
+    - name: Set up QEMU
+      id: buildx-qemy
+      if: env.SKIP_TARGET == '0'
+      uses: docker/setup-qemu-action@v1
+      # https://github.com/docker/setup-buildx-action
     - name: Set up Docker Buildx
       id: buildx
       if: env.SKIP_TARGET == '0'
-      uses: crazy-max/ghaction-docker-buildx@v1
-      with:
-        version: latest
+      uses: docker/setup-buildx-action@v1
 
     - name: Configure docker
       if: env.SKIP_TARGET == '0'
@@ -98,6 +112,15 @@ jobs:
       env:
         TIMEOUT_MIN: 5
       uses: tete1030/safe-debugger-action@dev
+
+    - name: 'Get key-build'
+      run: 'echo "$OPENWRT_BUILD_KEY" > $HOST_WORK_DIR/key-build;echo "$OPENWRT_BUILD_KEY_PUB" > $HOST_WORK_DIR/key-build.pub'
+      if: env.SKIP_TARGET == '0' && env.TEST != '1'
+      shell: bash
+      env:
+        HOST_WORK_DIR: ${{github.workspace}}
+        OPENWRT_BUILD_KEY: ${{secrets.OPENWRT_BUILD_KEY}}
+        OPENWRT_BUILD_KEY_PUB: ${{secrets.OPENWRT_BUILD_KEY_PUB}}
 
     - name: Get builder
       if: env.SKIP_TARGET == '0'
@@ -137,6 +160,7 @@ jobs:
       run: scripts/cisteps/build-openwrt/11-compile_multi.sh
 
     - name: Compile firmware and packages with single threads when failed
+      id: stcompile
       if: env.SKIP_TARGET == '0' && steps.mtcompile.outputs.started == '1' && steps.mtcompile.outputs.status != 'success'
       run: scripts/cisteps/build-openwrt/12-compile_single.sh
 
@@ -153,14 +177,6 @@ jobs:
         TMATE_DOCKER_CONTAINER: ${{env.BUILDER_CONTAINER_ID}}
       uses: tete1030/safe-debugger-action@dev
 
-    - name: Upload builder
-      if: |
-        env.SKIP_TARGET == '0' && !cancelled() && (
-          job.status == 'success'
-          || env.OPT_PUSH_WHEN_FAIL == '1'
-        )
-      run: scripts/cisteps/build-openwrt/13-upload_builder.sh
-
     # - name: Upload bin directory
     #   uses: actions/upload-artifact@master
     #   if: env.SKIP_TARGET == '0' && !cancelled()
@@ -170,7 +186,7 @@ jobs:
 
     - name: Organize files
       id: organize
-      if: env.SKIP_TARGET == '0' && !cancelled()
+      if: env.SKIP_TARGET == '0' && !cancelled() && ( steps.mtcompile.outputs.status == 'success' || steps.stcompile.outputs.status == 'success' )
       run: scripts/cisteps/build-openwrt/14-organize_files.sh
 
     - name: Upload firmware
@@ -186,6 +202,52 @@ jobs:
       with:
         name: OpenWrt_packages_${{env.BUILD_TARGET}}
         path: ${{env.HOST_BIN_DIR}}
+
+    - name: Checkout tools repo
+      uses: actions/checkout@v2
+      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        repository: openlumi/releases
+        path: ${{ env.HOST_WORK_DIR }}/releases
+        ref: gh-pages
+        token:  ${{ secrets.GH_TOKEN }}
+
+    - name: Copy files into Git branch
+      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
+      run: |
+        mkdir -p ${{env.HOST_WORK_DIR}}/releases/${{env.BUILD_TARGET}}
+        cp -r ${{env.HOST_BIN_DIR}}/* ${{env.HOST_WORK_DIR}}/releases/${{env.BUILD_TARGET}}
+        scripts/make-index-html.sh ${{env.HOST_WORK_DIR}}/releases || true
+
+    - name: Commit files
+      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
+      run: |
+        cd ${{ env.HOST_WORK_DIR }}/releases
+        git status
+        git add -A
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "Updates files from build ${{env.BUILD_TARGET}}\n $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" -a
+        git push || git pull && git push
+
+#    - name: Create Pull Request
+#      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
+#      uses: peter-evans/create-pull-request@v3
+#      with:
+#        token: ${{ secrets.GH_TOKEN }}
+#        path: ${{ env.HOST_WORK_DIR }}/releases
+#        branch: pr-pages
+#        base: gh-pages
+#        title: 'Updates files from latest Actions build'
+
+
+    - name: Upload builder
+      if: |
+        env.SKIP_TARGET == '0' && !cancelled() && (
+          job.status == 'success'
+          || env.OPT_PUSH_WHEN_FAIL == '1'
+        )
+      run: scripts/cisteps/build-openwrt/13-upload_builder.sh
 
     # failure checking
     - name: '[Failure/Debug] wait for SSH connection (timeout 30min. You are safe to cancel the job now.)'

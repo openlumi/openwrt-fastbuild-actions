@@ -15,14 +15,16 @@ env:
   DK_PASSWORD: ${{secrets.docker_password}}
   SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
   TMATE_ENCRYPT_PASSWORD: ${{secrets.TMATE_ENCRYPT_PASSWORD}}
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 name: Squash builders
 
-# Start every 72 hours
+# Start every 24 hours
 on:
+  workflow_dispatch:
   deployment:
-  # schedule:
-  # - cron: '0 */72 * * *'
+  schedule:
+    - cron: '10 6/24 */7 * *'
 
 jobs:
   squash:
@@ -34,53 +36,75 @@ jobs:
         mode:
           - normal
           - test
-        target: []
+        target:
+          - 19.07.7
+          - 19.07.8
+          - 21.02.0-rc4--dgnwg05lm
+          - 21.02.0-rc4--zhwg11lm
+          - snapshot--dgnwg05lm
+          - snapshot--zhwg11lm
         include:
-        - mode: normal
-          title: Squashing builder
-        - mode: test
-          title: Squashing test builder
+          - mode: normal
+            title: Squashing builder
+          - mode: test
+            title: Squashing test builder
     env:
       HOST_WORK_DIR: ${{github.workspace}}
       BUILD_MODE: ${{matrix.mode}}
       BUILD_TARGET: ${{matrix.target}}
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Init build env
-      run: scripts/cisteps/squash/01-init_env.sh
+      - name: Init build env
+        run: scripts/cisteps/squash/01-init_env.sh
 
-    - name: Check if skip this job
-      run: scripts/cisteps/squash/02-check_target.sh
+      - name: Check if skip this job
+        run: scripts/cisteps/squash/02-check_target.sh
 
-    - name: Clean up for extra space
-      if: env.SKIP_TARGET == '0'
-      run: scripts/cisteps/squash/03-clean_up.sh
+      - name: Clean up for extra space
+        if: env.SKIP_TARGET == '0'
+        run: scripts/cisteps/squash/03-clean_up.sh
 
-    - name: Set up Docker Buildx
-      id: buildx
-      if: env.SKIP_TARGET == '0'
-      uses: crazy-max/ghaction-docker-buildx@v1
-      with:
-        version: latest
+      # https://github.com/docker/setup-qemu-action
+      - name: Set up QEMU
+        id: buildx-qemy
+        if: env.SKIP_TARGET == '0'
+        uses: docker/setup-qemu-action@v1
+        # https://github.com/docker/setup-buildx-action
+      - name: Set up Docker Buildx
+        id: buildx
+        if: env.SKIP_TARGET == '0'
+        uses: docker/setup-buildx-action@v1
 
-    - name: Configure docker
-      if: env.SKIP_TARGET == '0'
-      run: scripts/cisteps/squash/04-configure_docker.sh
+      - name: Configure docker
+        if: env.SKIP_TARGET == '0'
+        run: scripts/cisteps/squash/04-configure_docker.sh
 
-    - name: Check status of builder
-      if: env.SKIP_TARGET == '0'
-      run: scripts/cisteps/squash/05-check_builders.sh
+      - name: Check status of builder
+        if: env.SKIP_TARGET == '0'
+        run: scripts/cisteps/squash/05-check_builders.sh
 
-    - name: Download lastest builder
-      if: env.SKIP_TARGET == '0'
-      run: scripts/cisteps/squash/06-get_builder.sh
+      - name: Download lastest builder
+        if: env.SKIP_TARGET == '0'
+        run: scripts/cisteps/squash/06-get_builder.sh
 
-    - name: Squash builder when necessary
-      if: env.SKIP_TARGET == '0'
-      run: scripts/cisteps/squash/07-squash_builder.sh
+      - name: Print disk space & size images
+        if: env.SKIP_TARGET == '0'
+        run: |
+               df -h
+               docker image ls
 
-    - name: Upload squashed builder
-      if: env.SKIP_TARGET == '0'
-      run: scripts/cisteps/squash/08-upload_builder.sh
+      - name: Squash builder when necessary
+        if: env.SKIP_TARGET == '0'
+        run: scripts/cisteps/squash/07-squash_builder.sh
+
+      - name: Print disk space & size images
+        if: env.SKIP_TARGET == '0'
+        run: |
+          df -h
+          docker image ls
+
+      - name: Upload squashed builder
+        if: env.SKIP_TARGET == '0'
+        run: scripts/cisteps/squash/08-upload_builder.sh

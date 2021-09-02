@@ -3,3 +3,5 @@
 /openwrt_firmware
 
 .DS_Store
+.idea
+git archive --output=test_zip.zip HEAD $(git diff --diff-filter=ACMRTUXB --name-only hash1 hash2)

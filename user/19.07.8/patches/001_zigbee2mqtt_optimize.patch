@@ -1,0 +1,67 @@
+--- package/feeds/node/node-zigbee2mqtt/Makefile
++++ package/feeds/node/node-zigbee2mqtt/Makefile
+@@ -36,6 +36,10 @@
+   Allows you to use your Zigbee devices without the vendors bridge or gateway. It bridges events and allows you to control your Zigbee devices via MQTT. In this way you can integrate your Zigbee devices with whatever smart home infrastructure you are using.
+ endef
+ 
++define Package/node-zigbee2mqtt/conffiles
++/etc/zigbee2mqtt/configuration.yaml
++endef
++
+ TAR_OPTIONS+= --strip-components 1
+ TAR_CMD=$(HOST_TAR) -C $(1) $(TAR_OPTIONS)
+ 
+@@ -44,23 +44,35 @@
+
+ TARGET_CFLAGS+=$(FPIC)
+ TARGET_CPPFLAGS+=$(FPIC)
+-
+-define Build/Compile
+-	cd $(PKG_BUILD_DIR); \
+-	$(MAKE_VARS) \
+-	$(MAKE_FLAGS) \
+-	npm_config_nodedir=$(STAGING_DIR)/usr/ \
+-	npm_config_cache=$(TMP_DIR)/npm-cache-$(TMPNPM) \
+-	npm_config_tmp=$(TMP_DIR)/npm-tmp-$(TMPNPM) \
+-	npm install --production --global-style --no-save --omit=dev --no-package-lock --build-from-source --target_arch=$(NODEJS_CPU)
++NPM_FLAGS=$(MAKE_VARS) \
++ 	$(MAKE_FLAGS) \
++	npm_config_arch=$(NODEJS_CPU) \
++	npm_config_target_arch=$(NODEJS_CPU) \
++	npm_config_build_from_source=true \
++ 	npm_config_nodedir=$(STAGING_DIR)/usr/ \
++	npm_config_prefix=$(PKG_INSTALL_DIR)/usr/ \
++ 	npm_config_cache=$(TMP_DIR)/npm-cache-$(TMPNPM) \
++	npm_config_tmp=$(TMP_DIR)/npm-tmp-$(TMPNPM)
++
++define Build/Compile
++	mkdir -p $(TMP_DIR)/modclean
++	$(NPM_FLAGS) npm i modclean --prefix=$(TMP_DIR)/modclean
++	$(NPM_FLAGS) npm i -g --production $(PKG_BUILD_DIR)
++	$(NPM_FLAGS) npm ci --production --prefix=$(PKG_BUILD_DIR)/ --target_arch=$(NODEJS_CPU)
+ 	rm $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman/npm-shrinkwrap.json
+ 	rm $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman-converters/npm-shrinkwrap.json
+ 	rm -f $(PKG_BUILD_DIR)/node_modules/zigbee2mqtt-frontend/dist/report.html
+ 	rm -f $(PKG_BUILD_DIR)/node_modules/zigbee2mqtt-frontend/dist/*.map
+ 	rm -f $(PKG_BUILD_DIR)/node_modules/zigbee2mqtt-frontend/dist/*/*.map
++	rm -rf $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman-converters/node_modules/zigbee-herdsman/
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/min
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/src
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/locale
++
++	$(TMP_DIR)/modclean/node_modules/.bin/modclean --no-progress -r --patterns="default:safe" \
++    	    --additional-patterns="*.d.ts" \
++    	    --path $(PKG_BUILD_DIR) --ignore="examples,example*"
++
+ 	rm -rf $(TMP_DIR)/npm-tmp-$(TMPNPM)
+ 	rm -rf $(TMP_DIR)/npm-cache-$(TMPNPM)
+ 	rm -f $(PKG_BUILD_DIR)/node_modules/.package-lock.json
+@@ -79,6 +91,8 @@
+ 		$(1)/opt/$(PKG_NPM_NAME)/
+ 	$(INSTALL_DIR) $(1)/etc/init.d
+ 	$(INSTALL_BIN) ./files/zigbee2mqtt.init $(1)/etc/init.d/zigbee2mqtt
++	$(INSTALL_DIR) $(1)/etc/zigbee2mqtt
++	$(INSTALL_CONF) ./files/configuration.yaml $(1)/etc/zigbee2mqtt/configuration.yaml
+ endef
+
+ define Package/node-zigbee2mqtt/postrm

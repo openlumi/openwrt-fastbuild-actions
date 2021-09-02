@@ -17,5 +17,9 @@ fi
 [ "x${TEST}" != "x1" ] || exit 0
 
 cd "${OPENWRT_CUR_DIR}"
+if [ "x${OPT_ALL_PACKAGES}" == "x1" ]; then
+  sed -i '1 i\CONFIG_ALL=y' .config
+fi
+
 make defconfig
 make oldconfig

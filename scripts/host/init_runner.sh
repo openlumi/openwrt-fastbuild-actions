@@ -19,11 +19,17 @@ setup_envs() {
   HOST_TMP_DIR="/tmp/builder"
   BUILDER_BIN_DIR="${BUILDER_WORK_DIR}/openwrt_bin"
   HOST_BIN_DIR="${HOST_WORK_DIR}/openwrt_bin"
+  BUILDER_KEY_BUILD="${BUILDER_WORK_DIR}/key-build"
+  HOST_KEY_BUILD="${HOST_WORK_DIR}/key-build"
+  BUILDER_KEY_BUILD_PUB="${BUILDER_WORK_DIR}/key-build.pub"
+  HOST_KEY_BUILD_PUB="${HOST_WORK_DIR}/key-build.pub"
   BUILDER_PROFILE_DIR="${BUILDER_WORK_DIR}/user/current"
   BUILDER_MOUNT_OPTS="
     -v '${HOST_WORK_DIR}/scripts:${BUILDER_WORK_DIR}/scripts'
     -v '${HOST_WORK_DIR}/user:${BUILDER_WORK_DIR}/user'
     -v '${HOST_BIN_DIR}:${BUILDER_BIN_DIR}'
+    -v '${HOST_KEY_BUILD}:${BUILDER_KEY_BUILD}'
+    -v '${HOST_KEY_BUILD_PUB}:${BUILDER_KEY_BUILD_PUB}'
     -v '${HOST_TMP_DIR}:${BUILDER_TMP_DIR}'
   "
   OPENWRT_COMPILE_DIR="${BUILDER_WORK_DIR}/openwrt"
@@ -38,8 +44,8 @@ setup_envs() {
   source "${HOST_WORK_DIR}/scripts/lib/utils.sh"
 
   _set_env HOST_TMP_DIR HOST_BIN_DIR
-  _set_env BUILDER_IMAGE_ID_BUILDENV BUILDER_CONTAINER_ID BUILDER_WORK_DIR BUILDER_TMP_DIR BUILDER_BIN_DIR BUILDER_PROFILE_DIR BUILDER_MOUNT_OPTS
-  append_docker_exec_env BUILDER_WORK_DIR BUILDER_TMP_DIR BUILDER_BIN_DIR BUILDER_PROFILE_DIR
+  _set_env BUILDER_IMAGE_ID_BUILDENV BUILDER_CONTAINER_ID BUILDER_WORK_DIR BUILDER_TMP_DIR BUILDER_BIN_DIR BUILDER_PROFILE_DIR BUILDER_KEY_BUILD BUILDER_KEY_BUILD_PUB BUILDER_MOUNT_OPTS
+  append_docker_exec_env BUILDER_WORK_DIR BUILDER_TMP_DIR BUILDER_BIN_DIR BUILDER_PROFILE_DIR BUILDER_KEY_BUILD BUILDER_KEY_BUILD_PUB
   _set_env DK_EXEC_ENVS
 
   _set_env OPENWRT_COMPILE_DIR OPENWRT_SOURCE_DIR OPENWRT_CUR_DIR
@@ -154,7 +160,7 @@ prepare_dirs() {
 main() {
   set -eo pipefail
   if [ "$1" = "build" ]; then
-    BUILD_OPTS="update_feeds update_repo rebase rebuild debug push_when_fail package_only"
+    BUILD_OPTS="update_feeds update_repo rebase rebuild debug push_when_fail package_only all_packages"
   fi
 
   install_commands

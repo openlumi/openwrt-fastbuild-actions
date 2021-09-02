@@ -25,6 +25,14 @@ fi
 
 cp "${BUILDER_PROFILE_DIR}/config.diff" "${OPENWRT_CUR_DIR}/.config"
 
+echo "Executing pre_custom.sh"
+if [ -f "${BUILDER_PROFILE_DIR}/pre_custom.sh" ]; then
+  (
+    cd "${OPENWRT_CUR_DIR}"
+    /bin/bash "${BUILDER_PROFILE_DIR}/pre_custom.sh"
+  )
+fi
+
 echo "Applying patches..."
 if [ -n "$(ls -A "${BUILDER_PROFILE_DIR}/patches" 2>/dev/null)" ]; then
   (
@@ -75,7 +83,7 @@ fi
 # Restore build cache and timestamps
 if [ "x${OPENWRT_CUR_DIR}" != "x${OPENWRT_COMPILE_DIR}" ]; then
   echo "Syncing rebuilt source code to work directory..."
-  # sync files by comparing checksum
+  # sync files by comparing checksum --delete
   rsync -camv --no-t --delete "${sync_exclude_opts[@]}" \
     "${OPENWRT_CUR_DIR}/" "${OPENWRT_COMPILE_DIR}/"
 

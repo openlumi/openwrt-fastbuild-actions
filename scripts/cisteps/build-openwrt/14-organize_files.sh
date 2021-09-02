@@ -11,6 +11,6 @@ if [ "x${OPT_PACKAGE_ONLY}" != "x1" ]; then
   cd "${HOST_BIN_DIR}/targets/"*/*
   all_firmware_files=( !(packages) )
   # shellcheck disable=SC2015
-  [ ${#all_firmware_files[@]} -gt 0 ] && mv "${all_firmware_files[@]}" "${HOST_WORK_DIR}/openwrt_firmware/" || true
+  [ ${#all_firmware_files[@]} -gt 0 ] && cp "${all_firmware_files[@]}" "${HOST_WORK_DIR}/openwrt_firmware/" || true
 fi
 echo "::set-output name=status::success"
