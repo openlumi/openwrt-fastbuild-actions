@@ -23,16 +23,6 @@ if [ "x${TEST}" = "x1" ]; then
   exit 0
 fi
 
-cp "${BUILDER_PROFILE_DIR}/config.diff" "${OPENWRT_CUR_DIR}/.config"
-
-echo "Executing pre_custom.sh"
-if [ -f "${BUILDER_PROFILE_DIR}/pre_custom.sh" ]; then
-  (
-    cd "${OPENWRT_CUR_DIR}"
-    /bin/bash "${BUILDER_PROFILE_DIR}/pre_custom.sh"
-  )
-fi
-
 echo "Applying patches..."
 if [ -n "$(ls -A "${BUILDER_PROFILE_DIR}/patches" 2>/dev/null)" ]; then
   (

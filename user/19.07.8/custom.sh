@@ -1,5 +1,9 @@
 #!/bin/bash
 
+mv .config .config.diff
+cp config_xiaomi_lumi .config
+cat .config.diff >> .config
+
 mkdir -p files
 cp -r files_xiaomi_lumi/* files/
 
