@@ -1,3 +1,6 @@
+CONFIG_ALL_KMODS=y
+# CONFIG_PACKAGE_kmod-bluetooth_6lowpan is not set
+# CONFIG_PACKAGE_kmod-6lowpan is not set
 
 # CONFIG_FEED_freifunk is not set
 # CONFIG_FEED_routing is not set

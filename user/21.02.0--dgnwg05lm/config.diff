@@ -1,3 +1,7 @@
+CONFIG_ALL_KMODS=y
+# CONFIG_PACKAGE_kmod-bluetooth_6lowpan is not set
+# CONFIG_PACKAGE_kmod-6lowpan is not set
+
 CONFIG_IMAGEOPT=y
 CONFIG_NODEJS_14=y
 CONFIG_NODEJS_ICU_SMALL=y
