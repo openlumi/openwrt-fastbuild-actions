@@ -23,6 +23,8 @@ if [ "x${TEST}" = "x1" ]; then
   exit 0
 fi
 
+cp "${BUILDER_PROFILE_DIR}/config.diff" "${OPENWRT_CUR_DIR}/.config"
+
 echo "Applying patches..."
 if [ -n "$(ls -A "${BUILDER_PROFILE_DIR}/patches" 2>/dev/null)" ]; then
   (
