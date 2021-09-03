@@ -1,6 +1,40 @@
 CONFIG_ALL_KMODS=y
 # CONFIG_PACKAGE_kmod-bluetooth_6lowpan is not set
 # CONFIG_PACKAGE_kmod-6lowpan is not set
+CONFIG_PACKAGE_block-mount=m
+CONFIG_PACKAGE_blockd=m
+CONFIG_PACKAGE_comgt-directip=m
+CONFIG_PACKAGE_comgt-ncm=m
+CONFIG_PACKAGE_comgt=m
+CONFIG_PACKAGE_dropbearconvert=m
+CONFIG_PACKAGE_ip6tables-extra=m
+CONFIG_PACKAGE_ip6tables-mod-nat=m
+CONFIG_PACKAGE_iptables-mod-checksum=m
+CONFIG_PACKAGE_iptables-mod-cluster=m
+CONFIG_PACKAGE_iptables-mod-clusterip=m
+CONFIG_PACKAGE_iptables-mod-conntrack-extra=m
+CONFIG_PACKAGE_iptables-mod-extra=m
+CONFIG_PACKAGE_iptables-mod-filter=m
+CONFIG_PACKAGE_iptables-mod-hashlimit=m
+CONFIG_PACKAGE_iptables-mod-ipopt=m
+CONFIG_PACKAGE_iptables-mod-iprange=m
+CONFIG_PACKAGE_iptables-mod-ipsec=m
+CONFIG_PACKAGE_iptables-mod-led=m
+CONFIG_PACKAGE_iptables-mod-nat-extra=m
+CONFIG_PACKAGE_iptables-mod-nflog=m
+CONFIG_PACKAGE_iptables-mod-nfqueue=m
+CONFIG_PACKAGE_iptables-mod-physdev=m
+CONFIG_PACKAGE_iptables-mod-rpfilter=m
+CONFIG_PACKAGE_iptables-mod-tee=m
+CONFIG_PACKAGE_iptables-mod-tproxy=m
+CONFIG_PACKAGE_iptables-mod-trace=m
+CONFIG_PACKAGE_iptables-mod-u32=m
+CONFIG_PACKAGE_iptables-mod-ulog=m
+CONFIG_PACKAGE_libxtables-nft12=m
+CONFIG_PACKAGE_snapshot-tool=m
+CONFIG_PACKAGE_spidev-test=m
+CONFIG_PACKAGE_umbim=m
+CONFIG_PACKAGE_uqmi=m
 
 CONFIG_IMAGEOPT=y
 CONFIG_NODEJS_14=y
