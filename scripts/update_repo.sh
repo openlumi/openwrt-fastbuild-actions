@@ -80,6 +80,7 @@ if [ "x${OPENWRT_CUR_DIR}" != "x${OPENWRT_COMPILE_DIR}" ] && [ -d "${OPENWRT_COM
   git -C "${OPENWRT_CUR_DIR}" remote set-url origin "${REPO_URL}"
   git -C "${OPENWRT_CUR_DIR}" fetch
   git -C "${OPENWRT_CUR_DIR}" checkout "${REPO_BRANCH}"
+  git -C "${OPENWRT_CUR_DIR}" reset --hard origin/${REPO_BRANCH}
 else
   git clone -b "${REPO_BRANCH}" "${REPO_URL}" "${OPENWRT_CUR_DIR}"
 fi
