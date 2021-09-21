@@ -113,6 +113,7 @@ CONFIG_PACKAGE_python3-aio-mqtt=m
 CONFIG_PACKAGE_python3-asyncio=m
 CONFIG_PACKAGE_python3-base=m
 CONFIG_PACKAGE_python3-bleak=m
+CONFIG_PACKAGE_python3-bluepy=m
 CONFIG_PACKAGE_python3-cgi=m
 CONFIG_PACKAGE_python3-cgitb=m
 CONFIG_PACKAGE_python3-codecs=m
