@@ -29,7 +29,7 @@ packages_file="${BUILDER_TMP_DIR}/packages.txt"
 packages_url="https://github.com/tete1030/openwrt-buildenv/raw/master/packages.txt"
 (
   set +eo pipefail
-  
+
   rm -f "${packages_file}" || true
   echo "Downloading package list from ${packages_url}"
   curl -sLo "${packages_file}" "${packages_url}"
@@ -47,3 +47,6 @@ if [ -f "${packages_file}" ]; then
   echo "Installed packages: ${all_packages[*]}"
   rm -f "${packages_file}"
 fi
+
+#DST_Root_CA_X3 ssl certificate date expired
+sudo rm /usr/share/ca-certificates/mozilla/DST_Root_CA_X3.crt  && sudo update-ca-certificates || true
