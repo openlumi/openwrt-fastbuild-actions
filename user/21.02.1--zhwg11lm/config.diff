@@ -91,7 +91,6 @@ CONFIG_PACKAGE_node-espruinohub=m
 CONFIG_PACKAGE_node-firmata=m
 CONFIG_PACKAGE_node-hap-nodejs=m
 CONFIG_PACKAGE_node-johnny-five=m
-CONFIG_PACKAGE_node-lumi=m
 CONFIG_PACKAGE_node-mdns=m
 CONFIG_PACKAGE_node-mqtt=m
 CONFIG_PACKAGE_node-npm=m
