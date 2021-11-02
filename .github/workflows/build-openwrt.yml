@@ -58,8 +58,10 @@ jobs:
         target:
           - 19.07.7
           - 19.07.8
-          - 21.02.0--dgnwg05lm
-          - 21.02.0--zhwg11lm
+#          - 21.02.0--dgnwg05lm
+#          - 21.02.0--zhwg11lm
+          - 21.02.1--dgnwg05lm
+          - 21.02.1--zhwg11lm
 #          - snapshot--dgnwg05lm
 #          - snapshot--zhwg11lm
         include:
