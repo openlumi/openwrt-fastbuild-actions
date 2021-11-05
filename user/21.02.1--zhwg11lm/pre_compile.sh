@@ -1,6 +1,6 @@
-mv .config .config.config_aqara_zhwg11lm
+mv ${OPENWRT_CUR_DIR}/.config ${OPENWRT_CUR_DIR}/.config.config_aqara_zhwg11lm
 
-cp config_xiaomi_dgnwg05lm .config
+cp config_xiaomi_dgnwg05lm ${OPENWRT_CUR_DIR}/.config
 cat ${BUILDER_PROFILE_DIR}/.config.diff >> .config
 
 cd "${OPENWRT_CUR_DIR}"
