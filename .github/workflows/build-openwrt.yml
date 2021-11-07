@@ -62,6 +62,7 @@ jobs:
           - 21.02.0--zhwg11lm
           - 21.02.1--dgnwg05lm
           - 21.02.1--zhwg11lm
+          - 21.02.1
 #          - snapshot--dgnwg05lm
 #          - snapshot--zhwg11lm
         include:
