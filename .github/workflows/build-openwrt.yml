@@ -26,7 +26,10 @@ on:
       OPT_DEBUG: 1
   push:
     paths:
-    - 'user/**'
+      - 'user/**'
+  pull_request:
+    paths:
+      - 'user/**'
   # # For 'schedule', see examples in: https://crontab.guru/examples.html
   # #     e.g. every sunday midnight: '0 0 * * 0' every midnight: '0 0 * * *'
   # schedule:
@@ -206,7 +209,7 @@ jobs:
 
     - name: Checkout tools repo
       uses: actions/checkout@v2
-      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
+      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled() && github.ref == 'refs/heads/master'
       with:
         repository: openlumi/releases
         path: ${{ env.HOST_WORK_DIR }}/releases
@@ -214,14 +217,14 @@ jobs:
         token:  ${{ secrets.GH_TOKEN }}
 
     - name: Copy files into Git branch
-      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
+      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled() && github.ref == 'refs/heads/master'
       run: |
         mkdir -p ${{env.HOST_WORK_DIR}}/releases/${{env.BUILD_TARGET}}
         cp -r ${{env.HOST_BIN_DIR}}/* ${{env.HOST_WORK_DIR}}/releases/${{env.BUILD_TARGET}}
         scripts/make-index-html.sh ${{env.HOST_WORK_DIR}}/releases || true
 
     - name: Commit files
-      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
+      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled() && github.ref == 'refs/heads/master'
       run: |
         cd ${{ env.HOST_WORK_DIR }}/releases
         git status
@@ -247,7 +250,7 @@ jobs:
         env.SKIP_TARGET == '0' && !cancelled() && (
           job.status == 'success'
           || env.OPT_PUSH_WHEN_FAIL == '1'
-        )
+        ) && github.ref == 'refs/heads/master'
       run: scripts/cisteps/build-openwrt/13-upload_builder.sh
 
     # failure checking
