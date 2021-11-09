@@ -41,6 +41,7 @@ jobs:
           - 19.07.8
           - 21.02.0
           - 21.02.1
+          - snapshot
         include:
           - mode: normal
             title: Squashing builder
