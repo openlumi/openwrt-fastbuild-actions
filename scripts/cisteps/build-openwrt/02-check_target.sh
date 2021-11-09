@@ -59,6 +59,11 @@ elif [ "x${GITHUB_EVENT_NAME}" = "xrepository_dispatch" ] || [ "x${GITHUB_EVENT_
   if [[ "${RD_TASK}" == "build" && ( "${RD_TARGET}" == "all" || "${RD_TARGET}" == "${BUILD_TARGET}" ) ]]; then
     SKIP_TARGET=0
   fi
+
+elif [ "x${GITHUB_EVENT_NAME}" = "xpull_request" ]; then
+  echo "Repo pull_request event task: ${RD_TASK} target: ${RD_TARGET}"
+# @todo optimize?
+  SKIP_TARGET=0
 else
   echo "::warning::Unknown default target for triggering event: ${GITHUB_EVENT_NAME}" >&2
   SKIP_TARGET=0
