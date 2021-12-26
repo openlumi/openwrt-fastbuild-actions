@@ -84,7 +84,6 @@ CONFIG_PACKAGE_python3-unittest=m
 CONFIG_PACKAGE_python3-urllib=m
 CONFIG_PACKAGE_python3-xml=m
 CONFIG_PACKAGE_python3-zope-interface=m
-CONFIG_PACKAGE_snapcast=m
 
 CONFIG_VERSIONOPT=y
 CONFIG_VERSION_BUG_URL=""
