@@ -30,8 +30,8 @@
  	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/src
  	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/locale
  	clean-modules -y -D $(PKG_BUILD_DIR)/node_modules --exclude "**/*.map.js" "**/*.png" \
-+		"**/*.d.ts" "**/*.gypi" "**/*.mk" "**/*.Makefile" \
  		"**/example/" "**/examples/" --include "**/npm-shrinkwrap.json" "**/.babelrc.js" \
++		"**/*.d.ts" "**/*.gypi" "**/*.mk" "**/*.Makefile" \
  		"**/.prebuild-installrc" "**/obj.target/" "**/config.gypi" "**/binding.Makefile"
  	rm -rf $(TMP_DIR)/npm-tmp-$(TMPNPM)
 @@ -74,13 +80,13 @@
