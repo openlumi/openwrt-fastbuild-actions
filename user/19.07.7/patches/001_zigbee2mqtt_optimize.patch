@@ -1,6 +1,6 @@
 --- package/feeds/node/node-zigbee2mqtt/Makefile
 +++ package/feeds/node/node-zigbee2mqtt/Makefile
-@@ -50,14 +50,21 @@
+@@ -50,20 +50,26 @@
  TARGET_CFLAGS+=$(FPIC)
  TARGET_CPPFLAGS+=$(FPIC)
  
@@ -13,7 +13,7 @@
 +    npm_config_prefix=$(PKG_INSTALL_DIR)/usr/ \
 +    npm_config_cache=$(TMP_DIR)/npm-cache-$(TMPNPM) \
 +    npm_config_tmp=$(TMP_DIR)/npm-tmp-$(TMPNPM)
-+    
++
  define Build/Compile
 -	cd $(PKG_BUILD_DIR); \
 -	$(MAKE_VARS) \
@@ -22,25 +22,19 @@
 -	npm_config_cache=$(TMP_DIR)/npm-cache-$(TMPNPM) \
 -	npm_config_tmp=$(TMP_DIR)/npm-tmp-$(TMPNPM) \
 -	npm install --production --global-style --no-save --omit=dev --no-package-lock --build-from-source --target_arch=$(NODEJS_CPU) --prefer-dedupe
-+	mkdir -p $(TMP_DIR)/modclean
-+	$(NPM_FLAGS) npm i modclean --prefix=$(TMP_DIR)/modclean
 +	$(NPM_FLAGS) npm i -g --production $(PKG_BUILD_DIR)
 +	$(NPM_FLAGS) npm ci --production --prefix=$(PKG_BUILD_DIR) --target_arch=$(NODEJS_CPU) --prefer-dedupe
- 	rm $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman/npm-shrinkwrap.json
- 	rm $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman-converters/npm-shrinkwrap.json
- 	rm -f $(PKG_BUILD_DIR)/node_modules/zigbee2mqtt-frontend/dist/report.html
-@@ -85,23 +92,21 @@
- 	rm -f $(PKG_BUILD_DIR)/node_modules/winston/node_modules/winston-transport/.babelrc
- 	rm -f $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman/.babelrc.js
- 	rm -f $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman/node_modules/@serialport/bindings/.prebuild-installrc
--	modclean --no-progress -r --patterns="default:safe" --additional-patterns="*.d.ts,*.gypi,*.mk,*.Makefile" \
-+	$(TMP_DIR)/modclean/node_modules/.bin/modclean --no-progress -r --patterns="default:safe" --additional-patterns="*.d.ts,*.gypi,*.mk,*.Makefile" \
- 	         --path $(PKG_BUILD_DIR) --ignore="examples,example*"
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman-converters/node_modules/zigbee-herdsman
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/ajv/lib
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/min
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/src
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/locale
+ 	clean-modules -y -D $(PKG_BUILD_DIR)/node_modules --exclude "**/*.map.js" "**/*.png" \
++		"**/*.d.ts" "**/*.gypi" "**/*.mk" "**/*.Makefile" \
+ 		"**/example/" "**/examples/" --include "**/npm-shrinkwrap.json" "**/.babelrc.js" \
+ 		"**/.prebuild-installrc" "**/obj.target/" "**/config.gypi" "**/binding.Makefile"
  	rm -rf $(TMP_DIR)/npm-tmp-$(TMPNPM)
- 	rm -rf $(TMP_DIR)/npm-cache-$(TMPNPM)
--	rm -f $(PKG_BUILD_DIR)/node_modules/.package-lock.json
--	find $(PKG_BUILD_DIR)/node_modules -type d -empty -delete || true
- endef
+@@ -74,13 +80,13 @@
  
  define Package/node-zigbee2mqtt/install
  	$(INSTALL_DIR) $(1)/opt/$(PKG_NPM_NAME)
