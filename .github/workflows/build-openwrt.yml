@@ -58,12 +58,12 @@ jobs:
         # ########### Add your target name below ###########
         # E.g. target: [x86_64, wdr4310v1]
         target:
-          - 19.07.7
-          - 19.07.8
-          - 21.02.0
+#          - 19.07.7
+#          - 19.07.8
+#          - 21.02.0
           - 21.02.1
-          - 21.02.1-ha
-          - snapshot
+#          - 21.02.1-ha
+#          - snapshot
 #          - snapshot--dgnwg05lm
 #          - snapshot--zhwg11lm
         include:
