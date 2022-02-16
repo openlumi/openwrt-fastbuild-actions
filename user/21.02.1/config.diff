@@ -230,5 +230,5 @@ CONFIG_VERSION_BUG_URL="https://github.com/openlumi/openlumi.github.io/issues"
 CONFIG_VERSION_SUPPORT_URL="https://github.com/openlumi/openlumi.github.io/issues"
 CONFIG_VERSION_REPO="%u/%v"
 
-CONFIG_IB=y
+CONFIG_IB=n
 # CONFIG_IB_STANDALONE is not set
