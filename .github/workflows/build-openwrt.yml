@@ -15,7 +15,6 @@ env:
   TMATE_ENCRYPT_PASSWORD: ${{secrets.TMATE_ENCRYPT_PASSWORD}}
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
   OPT_UPDATE_FEEDS: 1
-  OPT_REBUILD: 1
 
 name: Build OpenWrt
 
@@ -60,11 +59,11 @@ jobs:
         # E.g. target: [x86_64, wdr4310v1]
         target:
 #          - 19.07.7
-#          - 19.07.8
+          - 19.07.8
 #          - 21.02.0
           - 21.02.1
 #          - 21.02.1-ha
-#          - snapshot
+          - snapshot
 #          - snapshot--dgnwg05lm
 #          - snapshot--zhwg11lm
         include:
