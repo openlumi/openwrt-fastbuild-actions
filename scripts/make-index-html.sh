@@ -105,7 +105,7 @@ function generate_html_index() {
 
       file=`basename "$i"`
       file_size=`du -h "$i" | cut -f1`
-      file_modify_time=`git log -1 --pretty="format:%ci" $i`
+      file_modify_time=`git log -1 --format=%ci -- $i`
 
       CONTENT+='<tr>'
       CONTENT+='<td class="n"><a href="./'$file'">'$file'</a></td>'
