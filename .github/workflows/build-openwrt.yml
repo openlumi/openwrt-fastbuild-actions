@@ -65,8 +65,6 @@ jobs:
           - 21.02.2
 #          - 21.02.1-ha
           - snapshot
-#          - snapshot--dgnwg05lm
-#          - snapshot--zhwg11lm
         include:
         - mode: normal
           title: Build
