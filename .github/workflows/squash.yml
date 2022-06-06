@@ -43,6 +43,7 @@ jobs:
           - 21.02.1
           - 21.02.2
           - 21.02.3
+          - 22.03.0
           - snapshot
         include:
           - mode: normal
