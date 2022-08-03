@@ -58,15 +58,15 @@ jobs:
         # ########### Add your target name below ###########
         # E.g. target: [x86_64, wdr4310v1]
         target:
-#          - 19.07.7
+          # - 19.07.7
           - 19.07.8
-#          - 21.02.0
-#          - 21.02.1
+          # - 21.02.0
+          # - 21.02.1
           - 21.02.2
-          - 21.02.3
-#          - 21.02.1-ha
-          - 22.03.0
-          - snapshot
+#          - 21.02.3
+          # - 21.02.1-ha
+#          - 22.03.0
+#          - snapshot
         include:
         - mode: normal
           title: Build
@@ -233,7 +233,7 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git commit -m "Updates files from build ${{env.BUILD_TARGET}}" -m "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" -a
-        git push || git pull --rebase && git push
+        git push
 
 #    - name: Create Pull Request
 #      if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled()
