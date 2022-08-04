@@ -64,10 +64,10 @@ jobs:
           # - 21.02.0
           # - 21.02.1
           # - 21.02.2
-#          - 21.02.3
+          - 21.02.3
           # - 21.02.1-ha
-#          - 22.03.0
-#          - snapshot
+          - 22.03.0
+          - snapshot
         include:
         - mode: normal
           title: Build
