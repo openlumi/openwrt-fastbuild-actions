@@ -15,6 +15,7 @@ env:
   TMATE_ENCRYPT_PASSWORD: ${{secrets.TMATE_ENCRYPT_PASSWORD}}
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
   OPT_UPDATE_FEEDS: 1
+  OPT_REBUILD: 1
 
 name: Build OpenWrt
 
@@ -60,14 +61,14 @@ jobs:
         target:
           # - 19.07.7
           # - 19.07.8
-          - 19.07.10
+#          - 19.07.10
           # - 21.02.0
           # - 21.02.1
           # - 21.02.2
-          - 21.02.3
+#          - 21.02.3
           # - 21.02.1-ha
           - 22.03.0
-          - snapshot
+#          - snapshot
         include:
         - mode: normal
           title: Build
