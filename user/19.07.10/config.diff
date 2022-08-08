@@ -2,6 +2,29 @@ CONFIG_ALL_KMODS=y
 # CONFIG_PACKAGE_kmod-bluetooth_6lowpan is not set
 # CONFIG_PACKAGE_kmod-6lowpan is not set
 # CONFIG_PACKAGE_kmod-fs-ntfs3 is not set
+CONFIG_PACKAGE_block-mount=m
+CONFIG_PACKAGE_blockd=m
+CONFIG_PACKAGE_libstdcpp=m
+CONFIG_PACKAGE_kmod-nls-base=y
+CONFIG_PACKAGE_kmod-nls-cp437=y
+CONFIG_PACKAGE_kmod-nls-iso8859-1=y
+CONFIG_PACKAGE_kmod-nls-utf8=y
+CONFIG_PACKAGE_kmod-scsi-core=y
+CONFIG_PACKAGE_kmod-sdhci=y
+CONFIG_PACKAGE_kmod-usb-core=y
+CONFIG_PACKAGE_kmod-usb-gadget=y
+CONFIG_PACKAGE_kmod-usb-gadget-cdc-composite=y
+CONFIG_PACKAGE_kmod-usb-gadget-ehci-debug=y
+CONFIG_PACKAGE_kmod-usb-gadget-eth=y
+CONFIG_PACKAGE_kmod-usb-gadget-hid=y
+CONFIG_PACKAGE_kmod-usb-gadget-mass-storage=y
+CONFIG_PACKAGE_kmod-usb-gadget-serial=y
+CONFIG_PACKAGE_kmod-usb-lib-composite=y
+CONFIG_PACKAGE_kmod-usb-net=y
+CONFIG_PACKAGE_kmod-usb-net-cdc-ether=y
+CONFIG_PACKAGE_kmod-usb-net-rndis=y
+CONFIG_PACKAGE_kmod-usb-serial=y
+CONFIG_PACKAGE_kmod-usb-storage=y
 
 # CONFIG_FEED_freifunk is not set
 # CONFIG_FEED_routing is not set
