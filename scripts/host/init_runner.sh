@@ -6,8 +6,10 @@ install_commands() {
   export DEBIAN_FRONTEND=noninteractive
 
   sudo -E apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
-  sudo -E add-apt-repository -y ppa:rmescandon/yq
-  sudo -E apt-get -qq update && sudo -E apt-get -qq install jq yq tree
+  #sudo -E add-apt-repository -y ppa:rmescandon/yq
+  sudo -E apt-get -qq update && sudo -E apt-get -qq install jq tree
+  wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
+  chmod +x /usr/bin/yq
 }
 
 setup_envs() {
