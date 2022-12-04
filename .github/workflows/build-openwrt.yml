@@ -83,7 +83,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
@@ -101,12 +101,12 @@ jobs:
     - name: Set up QEMU
       id: buildx-qemy
       if: env.SKIP_TARGET == '0'
-      uses: docker/setup-qemu-action@v1
+      uses: docker/setup-qemu-action@v2
       # https://github.com/docker/setup-buildx-action
     - name: Set up Docker Buildx
       id: buildx
       if: env.SKIP_TARGET == '0'
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
 
     - name: Configure docker
       if: env.SKIP_TARGET == '0'
@@ -213,7 +213,7 @@ jobs:
         path: ${{env.HOST_BIN_DIR}}
 
     - name: Checkout tools repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       if: env.SKIP_TARGET == '0' && env.TEST != '1' && steps.organize.outputs.status == 'success' && !cancelled() && github.ref == 'refs/heads/master'
       with:
         repository: openlumi/releases

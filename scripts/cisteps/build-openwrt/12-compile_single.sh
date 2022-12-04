@@ -6,4 +6,4 @@ set -eo pipefail
 source "${HOST_WORK_DIR}/scripts/host/docker.sh"
 
 docker_exec -e MODE=s "${BUILDER_CONTAINER_ID}" "${BUILDER_WORK_DIR}/scripts/compile.sh"
-echo "::set-output name=status::success"
+echo "status=success" >> $GITHUB_OUTPUT
