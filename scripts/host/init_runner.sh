@@ -6,9 +6,8 @@ install_commands() {
   export DEBIAN_FRONTEND=noninteractive
 
   sudo -E apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
-  #sudo -E add-apt-repository -y ppa:rmescandon/yq
-  sudo -E apt-get -qq update && sudo -E apt-get -qq install jq tree
-  sudo wget https://ppa.launchpadcontent.net/rmescandon/yq/ubuntu/pool/main/y/yq/yq_4.16.2_amd64.deb -O /tmp/yq_4.16.2_amd64.deb && sudo apt-get install /tmp/yq_4.16.2_amd64.deb && sudo rm -f /tmp/yq_4.16.2_amd64.deb
+  sudo -E add-apt-repository -y ppa:rmescandon/yq
+  sudo -E apt-get -qq update && sudo -E apt-get -qq install jq yq tree
 }
 
 setup_envs() {
