@@ -47,6 +47,7 @@ jobs:
           - 21.02.5
           - 22.03.0
           - 22.03.2
+          - 22.03.3
           - snapshot
         include:
           - mode: normal
