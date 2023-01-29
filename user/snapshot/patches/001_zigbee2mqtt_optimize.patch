@@ -1,6 +1,6 @@
 --- package/feeds/node/node-zigbee2mqtt/Makefile
 +++ package/feeds/node/node-zigbee2mqtt/Makefile
-@@ -50,20 +50,28 @@
+@@ -50,38 +50,45 @@
  TARGET_CFLAGS+=$(FPIC)
  TARGET_CPPFLAGS+=$(FPIC)
 
@@ -36,7 +36,11 @@
 +		"**/*.d.ts" "**/*.gypi" "**/*.mk" "**/*.Makefile" "**/package-lock.json" \
  		"**/.prebuild-installrc" "**/obj.target/" "**/config.gypi" "**/binding.Makefile"
  	rm -rf $(TMP_DIR)/npm-tmp-$(TMPNPM)
-@@ -74,13 +80,13 @@
+ 	rm -rf $(TMP_DIR)/npm-cache-$(TMPNPM)
+ 	rm -f $(PKG_BUILD_DIR)/node_modules/.package-lock.json
+ 	find $(PKG_BUILD_DIR)/node_modules -type d -empty -delete || true
+-	rm -rf $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman/node_modules/@serialport/bindings-cpp/prebuilds
+ endef
 
  define Package/node-zigbee2mqtt/install
  	$(INSTALL_DIR) $(1)/opt/$(PKG_NPM_NAME)
