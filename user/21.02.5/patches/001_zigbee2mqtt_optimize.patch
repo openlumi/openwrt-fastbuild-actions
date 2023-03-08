@@ -1,6 +1,6 @@
 --- package/feeds/node/node-zigbee2mqtt/Makefile
 +++ package/feeds/node/node-zigbee2mqtt/Makefile
-@@ -50,38 +50,45 @@
+@@ -50,38 +50,46 @@
  TARGET_CFLAGS+=$(FPIC)
  TARGET_CPPFLAGS+=$(FPIC)
 
@@ -30,6 +30,7 @@
  	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/min
  	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/src
  	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/locale
++	rm -rf $(PKG_BUILD_DIR)/node_modules/@serialport/bindings-cpp/prebuilds
 +	rm -rf $(PKG_BUILD_DIR)/node_modules/{react-icons,@rjsf,react-dom,react-bootstrap}
  	clean-modules -y -D $(PKG_BUILD_DIR)/node_modules --exclude "**/*.map.js" "**/*.png" \
  		"**/example/" "**/examples/" --include "**/npm-shrinkwrap.json" "**/.babelrc.js" \
