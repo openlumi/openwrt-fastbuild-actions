@@ -1,9 +1,9 @@
 --- package/feeds/node/node-zigbee2mqtt/Makefile
 +++ package/feeds/node/node-zigbee2mqtt/Makefile
-@@ -50,38 +50,46 @@
+@@ -51,38 +51,47 @@
  TARGET_CFLAGS+=$(FPIC)
  TARGET_CPPFLAGS+=$(FPIC)
-
+ 
 +NPM_FLAGS=$(MAKE_VARS) \
 +    $(MAKE_FLAGS) \
 +    npm_config_arch=$(NODEJS_CPU) \
@@ -14,14 +14,15 @@
 +    npm_config_cache=$(TMP_DIR)/npm-cache-$(TMPNPM) \
 +    npm_config_tmp=$(TMP_DIR)/npm-tmp-$(TMPNPM)
 +
++
  define Build/Compile
 -	cd $(PKG_BUILD_DIR); \
 -	$(MAKE_VARS) \
 -	$(MAKE_FLAGS) \
 -	npm_config_nodedir=$(STAGING_DIR)/usr/ \
--	npm_config_cache=$(TMP_DIR)/npm-cache-$(TMPNPM) \
+-	$(if $(CONFIG_NODEJS_NPM_KEEP_CACHE), npm_config_cache=$(NPM_CACHE_DIR)/npm-cache-$(PKG_NPM_NAME),npm_config_cache=$(TMP_DIR)/npm-cache-$(TMPNPM)) \
 -	npm_config_tmp=$(TMP_DIR)/npm-tmp-$(TMPNPM) \
--	npm install --production --global-style --no-save --omit=dev --no-package-lock --build-from-source --target_arch=$(NODEJS_CPU) --prefer-dedupe
+-	npm install --prefer-offline --no-audit --production --global-style --no-save --omit=dev --no-package-lock --build-from-source --target_arch=$(NODEJS_CPU) --prefer-dedupe
 +	$(NPM_FLAGS) npm i --package-lock-only --prefix=$(PKG_BUILD_DIR)
 +	$(NPM_FLAGS) npm i -g --production $(PKG_BUILD_DIR)
 +	$(NPM_FLAGS) npm ci --production --prefix=$(PKG_BUILD_DIR) --target_arch=$(NODEJS_CPU) --prefer-dedupe
@@ -42,7 +43,7 @@
  	find $(PKG_BUILD_DIR)/node_modules -type d -empty -delete || true
 -	rm -rf $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman/node_modules/@serialport/bindings-cpp/prebuilds
  endef
-
+ 
  define Package/node-zigbee2mqtt/install
  	$(INSTALL_DIR) $(1)/opt/$(PKG_NPM_NAME)
 -	$(CP) $(PKG_BUILD_DIR)/{package.json,LICENSE} \
