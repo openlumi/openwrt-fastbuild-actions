@@ -75,7 +75,7 @@ jobs:
           # - 22.03.3
           # - 22.03.4
           - 22.03.5
-          # - snapshot
+          - snapshot
         include:
         - mode: normal
           title: Build
