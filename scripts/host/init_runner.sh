@@ -12,7 +12,7 @@ install_commands() {
 
 setup_envs() {
   # Do not change
-  BUILDER_IMAGE_ID_BUILDENV="tete1030/openwrt-buildenv:latest"
+  BUILDER_IMAGE_ID_BUILDENV="openlumi/openwrt-buildenv:latest"
   BUILDER_CONTAINER_ID="builder"
   BUILDER_WORK_DIR="/home/builder"
   BUILDER_TMP_DIR="/tmp/builder"
