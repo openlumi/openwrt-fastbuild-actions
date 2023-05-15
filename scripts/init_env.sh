@@ -26,7 +26,7 @@ if [ ! -x "$(command -v curl)" ]; then
     sudo -E apt-get -qq install curl
 fi
 packages_file="${BUILDER_TMP_DIR}/packages.txt"
-packages_url="https://github.com/tete1030/openwrt-buildenv/raw/master/packages.txt"
+packages_url="https://github.com/openlumi/openwrt-buildenv/raw/master/packages.txt"
 (
   set +eo pipefail
 
