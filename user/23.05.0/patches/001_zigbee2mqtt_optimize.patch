@@ -33,8 +33,8 @@
  	rm -rf $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman/node_modules/@serialport/bindings-cpp/prebuilds
 @@ -69,19 +78,20 @@
  	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/locale
- 	clean-modules -y -D $(PKG_BUILD_DIR)/node_modules --exclude "**/*.map.js" "**/*.png" \
- 		"**/example/" "**/examples/" --include "**/npm-shrinkwrap.json" "**/.babelrc.js" \
+ 	clean-modules -y -D $(PKG_BUILD_DIR)/node_modules "!**/*.map.js" "!**/*.png" \
+		"!**/example/" "!**/examples/" "**/npm-shrinkwrap.json" "**/.babelrc.js" \
 +		"**/*.d.ts" "**/*.gypi" "**/*.mk" "**/*.Makefile" "**/package-lock.json" \
  		"**/.prebuild-installrc" "**/obj.target/" "**/config.gypi" "**/binding.Makefile"
  endef
