@@ -1,6 +1,6 @@
 --- package/feeds/node/node-zigbee2mqtt/Makefile
 +++ package/feeds/node/node-zigbee2mqtt/Makefile
-@@ -51,15 +51,20 @@
+@@ -51,14 +51,23 @@
  TARGET_CFLAGS+=$(FPIC)
  TARGET_CPPFLAGS+=$(FPIC)
 
@@ -14,6 +14,7 @@
 +    npm_config_cache=$(TMP_DIR)/npm-cache-$(TMPNPM) \
 +    npm_config_tmp=$(TMP_DIR)/npm-tmp-$(TMPNPM)
 +
++
  define Build/Compile
 -	cd $(PKG_BUILD_DIR); \
 -	$(MAKE_VARS) \
@@ -22,21 +23,18 @@
 -	$(if $(CONFIG_NODEJS_NPM_KEEP_CACHE), npm_config_cache=$(NPM_CACHE_DIR)/npm-cache-$(PKG_NPM_NAME),npm_config_cache=$(TMP_DIR)/npm-cache-$(TMPNPM)) \
 -	npm install --prefer-offline --no-audit --global-style --install-strategy=shallow --no-save --omit=dev --no-package-lock --build-from-source --target_arch=$(NODEJS_CPU) --prefer-dedupe
 -	rm -rf $(TMP_DIR)/npm-cache-$(TMPNPM)
--	rm -f $(PKG_BUILD_DIR)/node_modules/.package-lock.json
 +	$(NPM_FLAGS) npm i --package-lock-only --prefix=$(PKG_BUILD_DIR)
 +	$(NPM_FLAGS) npm i -g --production $(PKG_BUILD_DIR)
 +	$(NPM_FLAGS) npm ci --production --prefix=$(PKG_BUILD_DIR) --target_arch=$(NODEJS_CPU) --prefer-dedupe
- 	find $(PKG_BUILD_DIR)/node_modules -type d -empty -delete || true
- 	rm -rf $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman/node_modules/@serialport/bindings-cpp/prebuilds
- 	rm -rf $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman-converters/node_modules/zigbee-herdsman
-@@ -67,20 +72,23 @@
- 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/min
- 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/src
- 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/locale
 +	rm -rf $(PKG_BUILD_DIR)/node_modules/@serialport/bindings-cpp/prebuilds
 +	rm -rf $(PKG_BUILD_DIR)/node_modules/{react-icons,@rjsf,react-dom,react-bootstrap}
- 	clean-modules -y -D $(PKG_BUILD_DIR)/node_modules --exclude "**/*.map.js" "**/*.png" \
- 		"**/example/" "**/examples/" --include "**/npm-shrinkwrap.json" "**/.babelrc.js" \
+ 	rm -f $(PKG_BUILD_DIR)/node_modules/.package-lock.json
+ 	find $(PKG_BUILD_DIR)/node_modules -type d -empty -delete || true
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/zigbee-herdsman/node_modules/@serialport/bindings-cpp/prebuilds
+@@ -69,19 +78,20 @@
+ 	rm -rf $(PKG_BUILD_DIR)/node_modules/moment/locale
+ 	clean-modules -y -D $(PKG_BUILD_DIR)/node_modules "!**/*.map.js" "!**/*.png" \
+		"!**/example/" "!**/examples/" "**/npm-shrinkwrap.json" "**/.babelrc.js" \
 +		"**/*.d.ts" "**/*.gypi" "**/*.mk" "**/*.Makefile" "**/package-lock.json" \
  		"**/.prebuild-installrc" "**/obj.target/" "**/config.gypi" "**/binding.Makefile"
  endef
@@ -57,3 +55,4 @@
  		$(1)/opt/$(PKG_NPM_NAME)/
  	$(INSTALL_DIR) $(1)/etc/init.d
  	$(INSTALL_BIN) ./files/zigbee2mqtt.init $(1)/etc/init.d/zigbee2mqtt
+ 	$(INSTALL_DIR) $(1)/etc/zigbee2mqtt
