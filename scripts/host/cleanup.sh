@@ -7,7 +7,7 @@ set +eo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
 echo "Deleting files, please wait ..."
-sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/go* /usr/local/lib/android /opt/az /opt/ghc /opt/google /opt/microsoft /opt/pipx/venvs /opt/hostedtoolcache/CodeQL /opt/hostedtoolcache/go /opt/hostedtoolcache/Python
+sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d/* /var/cache/apt/archives /usr/local/share/boost /usr/local/share/powershell /usr/local/share/chromium /usr/local/go* /usr/local/julia* /usr/local/lib/android  /usr/local/lib/node_modules /usr/local/bin/pulumi* /usr/local/bin/oc /opt/az /opt/ghc /opt/google /opt/microsoft /opt/pipx/venvs /opt/hostedtoolcache
 sudo swapoff /swapfile
 sudo rm -f /swapfile
 docker rmi "$(docker images -q)"
