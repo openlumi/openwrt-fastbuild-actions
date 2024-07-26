@@ -56,6 +56,7 @@ jobs:
           #- 23.05.2
           #- 23.05.3
           - 23.05.4
+          - 23.05.4-gtw360
           - snapshot
         include:
           - mode: normal
