@@ -9,6 +9,9 @@
 
 set -eo pipefail
 
+# free up some space
+rm -rf "${OPENWRT_CUR_DIR}/dl/*" "${OPENWRT_CUR_DIR}/staging_dir/"
+
 if [ -z "${OPENWRT_COMPILE_DIR}" ] || [ -z "${OPENWRT_CUR_DIR}" ] || [ -z "${OPENWRT_SOURCE_DIR}" ]; then
   echo "::error::'OPENWRT_COMPILE_DIR', 'OPENWRT_CUR_DIR' or 'OPENWRT_SOURCE_DIR' is empty" >&2
   exit 1
