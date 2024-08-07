@@ -1,2 +1,0 @@
-
-lumimqttd https://github.com/Alx2000y/lumimqttd.git
