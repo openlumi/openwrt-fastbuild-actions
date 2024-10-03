@@ -14,8 +14,7 @@ env:
   SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
   TMATE_ENCRYPT_PASSWORD: ${{secrets.TMATE_ENCRYPT_PASSWORD}}
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-  OPT_UPDATE_FEEDS: 1
-  #OPT_REBUILD: 1
+  OPT_UPDATE_FEEDS: true
 
 name: Build OpenWrt
 
@@ -23,8 +22,11 @@ on:
   deployment:
   repository_dispatch:
   workflow_dispatch:
-    env:
-      OPT_DEBUG: 1
+    inputs:
+      OPT_REBUILD:
+        description: 'Rebuild from Scratch'
+        required: false
+        type: boolean
   pull_request:
   push:
     paths:
@@ -91,6 +93,7 @@ jobs:
       HOST_WORK_DIR: ${{github.workspace}}
       BUILD_MODE: ${{matrix.mode}}
       BUILD_TARGET: ${{matrix.target}}
+      OPT_REBUILD: ${{ inputs.OPT_REBUILD }}
 
     steps:
     - name: Checkout

@@ -11,10 +11,10 @@ docker commit -a "tete1030/openwrt-fastbuild-actions" -m "Building at $(date)" "
 docker container rm -fv "${BUILDER_CONTAINER_ID}"
 docker container prune -f
 docker system prune -f --volumes
-if [ "x${OPT_REBUILD}" != 'x1' ]; then
+if [ "x${OPT_REBUILD}" != 'xtrue' ]; then
   squash_image_when_necessary "${BUILDER_IMAGE_ID_INC}"
 fi
 docker push "${BUILDER_IMAGE_ID_INC}"
-if [ "x${OPT_REBUILD}" = "x1" ]; then
+if [ "x${OPT_REBUILD}" = "xtrue" ]; then
   create_remote_tag_alias "${BUILDER_IMAGE_ID_INC}" "${BUILDER_IMAGE_ID_BASE}"
 fi

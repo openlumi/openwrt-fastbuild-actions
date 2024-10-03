@@ -29,7 +29,7 @@ if [ -f "${OPENWRT_CUR_DIR}/feeds.conf" ]; then
   cp "${OPENWRT_CUR_DIR}/feeds.conf" "${BUILDER_TMP_DIR}/feeds.conf.bak"
 fi
 
-if [ "x${OPENWRT_CUR_DIR}" != "x${OPENWRT_COMPILE_DIR}" ] && [ "x${OPT_UPDATE_FEEDS}" != "x1" ]; then
+if [ "x${OPENWRT_CUR_DIR}" != "x${OPENWRT_COMPILE_DIR}" ] && [ "x${OPT_UPDATE_FEEDS}" != "xtrue" ]; then
   # Use previous feeds
   (
     set +eo pipefail
@@ -52,7 +52,7 @@ fi
 )
 
 if [ -f "${BUILDER_TMP_DIR}/feeds.conf.bak" ]; then
-  mv "${BUILDER_TMP_DIR}/feeds.conf.bak" "${OPENWRT_CUR_DIR}/feeds.conf" 
+  mv "${BUILDER_TMP_DIR}/feeds.conf.bak" "${OPENWRT_CUR_DIR}/feeds.conf"
 fi
 
 PACKAGE_DEFAULT_ROOT="package/openwrt-packages"
@@ -161,7 +161,7 @@ install_package() {
   echo "install_package: installing custom package: ${ALL_PARAMS}"
   if [ -z "${PACKAGE_SUBDIR}" ]; then
     # Use previous git to preserve version
-    if [ "x${full_cur_package_path}" != "x${full_compile_package_path}" ] && [ -d "${full_compile_package_path}/.git" ] && [ "x${OPT_UPDATE_FEEDS}" != "x1" ]; then
+    if [ "x${full_cur_package_path}" != "x${full_compile_package_path}" ] && [ -d "${full_compile_package_path}/.git" ] && [ "x${OPT_UPDATE_FEEDS}" != "xtrue" ]; then
       git clone "${full_compile_package_path}" "${full_cur_package_path}"
       git -C "${full_cur_package_path}" remote set-url origin "${PACKAGE_URL}"
       git -C "${full_cur_package_path}" fetch
@@ -178,7 +178,7 @@ install_package() {
     echo "install_package: using subdir strategy"
     # when using SUBDIR
     # Use previous git to preserve version
-    if [ "x${full_cur_package_path}" != "x${full_compile_package_path}" ] && [ -d "${full_compile_package_path}/.git" ] && [ "x${OPT_UPDATE_FEEDS}" != "x1" ]; then
+    if [ "x${full_cur_package_path}" != "x${full_compile_package_path}" ] && [ -d "${full_compile_package_path}/.git" ] && [ "x${OPT_UPDATE_FEEDS}" != "xtrue" ]; then
       git clone "${full_compile_package_path}" "${full_cur_package_path}"
       if [ -n "${PACKAGE_REF}" ]; then
         echo "install_package: PACKAGE_REF is not respected as 'update_feeds' is not enabled"
