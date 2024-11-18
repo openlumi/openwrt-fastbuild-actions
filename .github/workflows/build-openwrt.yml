@@ -83,7 +83,7 @@ jobs:
           # - 23.05.3
           # - 23.05.4
           - 23.05.5
-          # - snapshot
+          - snapshot
         include:
         - mode: normal
           title: Build
