@@ -83,6 +83,7 @@ jobs:
           # - 23.05.3
           # - 23.05.4
           - 23.05.5
+          - 24.10.0
           - snapshot
         include:
         - mode: normal
