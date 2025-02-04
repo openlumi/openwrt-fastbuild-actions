@@ -54,7 +54,7 @@ if [ "x${GITHUB_EVENT_NAME}" = "xpush" ]; then
     fi
   fi
 
-elif [ "x${GITHUB_EVENT_NAME}" = "xrepository_dispatch" ] || [ "x${GITHUB_EVENT_NAME}" = "xdeployment" ]; then
+elif [ "x${GITHUB_EVENT_NAME}" = "xrepository_dispatch" ] || [ "x${GITHUB_EVENT_NAME}" = "xdeployment" ] || [ "x${GITHUB_EVENT_NAME}" = "xworkflow_dispatch" ]; then
   echo "Repo dispatch or deployment event task: ${RD_TASK} target: ${RD_TARGET}"
   if [[ "${RD_TASK}" == "build" && ( "${RD_TARGET}" == "all" || "${RD_TARGET}" == "${BUILD_TARGET}" ) ]]; then
     SKIP_TARGET=0

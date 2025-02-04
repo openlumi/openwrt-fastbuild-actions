@@ -27,6 +27,14 @@ on:
         description: 'Rebuild from Scratch'
         required: false
         type: boolean
+      TARGET:
+        description: 'Build only'
+        type: choice
+        options:
+          - 'all'
+          - '24.10.0'
+          - '23.05.5'
+          - 'snapshot'
   pull_request:
   push:
     paths:
@@ -77,7 +85,7 @@ jobs:
           # - 22.03.3
           # - 22.03.4
           # - 22.03.5
-          #- 22.03.6
+          # - 22.03.6
           # - 23.05.0
           # - 23.05.2
           # - 23.05.3
@@ -95,6 +103,7 @@ jobs:
       BUILD_MODE: ${{matrix.mode}}
       BUILD_TARGET: ${{matrix.target}}
       OPT_REBUILD: ${{ inputs.OPT_REBUILD }}
+      FORCE_TARGET: ${{ inputs.TARGET }}
 
     steps:
     - name: Checkout
