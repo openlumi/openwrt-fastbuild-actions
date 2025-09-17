@@ -19,12 +19,12 @@ serial:
   port: /dev/ttymxc1
   adapter: zigate
 advanced:
-  baudrate: 1000000
+  baudrate: 115200
   log_level: info
   # Optional: Location of log directory (default: shown below)
-  log_directory: /tmp/log/zigbee2mqtt/%TIMESTAMP%
+  log_directory: /var/log/
   # Optional: Log file name, can also contain timestamp, e.g.: zigbee2mqtt_%TIMESTAMP%.log (default: shown below)
-  log_file: log.txt
+  log_file: z2m_%TIMESTAMP%.log
   # Optional: Log rotation (default: shown below)
   log_rotation: true
   # Optional: Output location of the log (default: shown below), leave empty to supress logging (log_output: [])
