@@ -32,7 +32,8 @@ on:
         type: choice
         options:
           - 'all'
-          - '24.10.4'
+          - '25.12.0'
+          - '24.10.5'
           - '23.05.6'
           - 'snapshot'
   pull_request:
@@ -98,6 +99,7 @@ jobs:
           # - 24.10.3
           # - 24.10.4
           - 24.10.5
+          - 25.12.0
           - snapshot
         include:
         - mode: normal
