@@ -153,7 +153,7 @@ jobs:
       if: env.SKIP_TARGET == '0' && env.OPT_DEBUG == '1' && env.TEST != '1'
       env:
         TIMEOUT_MIN: 5
-      uses: openlumi/safe-debugger-action@dev
+      uses: openlumi/action-debugger@master
 
     - name: 'Get key-build'
       run: 'echo "$OPENWRT_BUILD_KEY" > $HOST_WORK_DIR/key-build;echo "$OPENWRT_BUILD_KEY_PUB" > $HOST_WORK_DIR/key-build.pub'
@@ -181,7 +181,7 @@ jobs:
       if: env.SKIP_TARGET == '0' && env.OPT_DEBUG == '1' && env.TEST != '1'
       env:
         TMATE_DOCKER_CONTAINER: ${{env.BUILDER_CONTAINER_ID}}
-      uses: openlumi/safe-debugger-action@dev
+      uses: openlumi/action-debugger@master
 
     - name: Prepare config file
       if: env.SKIP_TARGET == '0'
@@ -217,7 +217,7 @@ jobs:
         && (job.status == 'failure' || (env.OPT_DEBUG == '1' && env.TEST != '1'))
       env:
         TMATE_DOCKER_CONTAINER: ${{env.BUILDER_CONTAINER_ID}}
-      uses: openlumi/safe-debugger-action@dev
+      uses: openlumi/action-debugger@master
 
     # - name: Upload bin directory
     #   uses: actions/upload-artifact@master
@@ -296,4 +296,4 @@ jobs:
       if: |
         env.SKIP_TARGET == '0' && !cancelled()
         && (job.status == 'failure' || (env.OPT_DEBUG == '1' && env.TEST != '1'))
-      uses: openlumi/safe-debugger-action@dev
+      uses: openlumi/action-debugger@master
