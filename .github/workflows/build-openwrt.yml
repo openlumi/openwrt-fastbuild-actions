@@ -155,9 +155,32 @@ jobs:
         TIMEOUT_MIN: 5
       uses: openlumi/action-debugger@master
 
-    - name: 'Get key-build'
+    - name: 'Get key-build opkg'
       run: 'echo "$OPENWRT_BUILD_KEY" > $HOST_WORK_DIR/key-build;echo "$OPENWRT_BUILD_KEY_PUB" > $HOST_WORK_DIR/key-build.pub'
-      if: env.SKIP_TARGET == '0' && env.TEST != '1'
+      if: |
+        env.SKIP_TARGET == '0' && env.TEST != '1' && (
+          !startsWith(matrix.target, '25') && 
+          !startsWith(matrix.target, '26') && 
+          !startsWith(matrix.target, '27') && 
+          !startsWith(matrix.target, '28') && 
+          !startsWith(matrix.target, 'snapshot')
+        )
+      shell: bash
+      env:
+        HOST_WORK_DIR: ${{github.workspace}}
+        OPENWRT_BUILD_KEY: ${{secrets.OPENWRT_BUILD_KEY}}
+        OPENWRT_BUILD_KEY_PUB: ${{secrets.OPENWRT_BUILD_KEY_PUB}}
+
+    - name: 'Get key-build apk'
+      run: 'echo "$OPENWRT_BUILD_APK_KEY" > $HOST_WORK_DIR/key-build;echo "$OPENWRT_BUILD_APK_KEY_PUB" > $HOST_WORK_DIR/key-build.pub'
+      if: |
+        env.SKIP_TARGET == '0' && env.TEST != '1' && (
+          startsWith(matrix.target, '25') || 
+          startsWith(matrix.target, '26') || 
+          startsWith(matrix.target, '27') || 
+          startsWith(matrix.target, '28') || 
+          startsWith(matrix.target, 'snapshot')
+        )
       shell: bash
       env:
         HOST_WORK_DIR: ${{github.workspace}}
