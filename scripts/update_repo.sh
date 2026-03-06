@@ -53,6 +53,34 @@ link_key() {
   fi
 }
 
+link_apk_key() {
+  local KEY_BUILD_APK_SEC="${OPENWRT_COMPILE_DIR}/private-key.pem"
+  local KEY_BUILD_APK_PUB="${OPENWRT_COMPILE_DIR}/public-key.pem"
+  local KEY_BUILD_APK_MOUNT_POINT="${BUILDER_APK_KEY_BUILD}"
+  local KEY_BUILD_APK_MOUNT_POINT_PUB="${BUILDER_APK_KEY_BUILD_PUB}"
+
+  if mountpoint "${KEY_BUILD_APK_MOUNT_POINT}" ; then
+    if [[ ! -L "${KEY_BUILD_APK_SEC}" || "$(readlink "${KEY_BUILD_APK_SEC}")" != "${KEY_BUILD_APK_MOUNT_POINT}" ]]; then
+      echo "'apk private key' link does not exist, creating"
+      rm -rf "${KEY_BUILD_APK_SEC}" || true
+      ln -sf "${KEY_BUILD_APK_MOUNT_POINT}" "${KEY_BUILD_APK_SEC}"
+    fi
+  else
+    echo "::error::'${KEY_BUILD_APK_MOUNT_POINT}' not mounted!" >&2
+    exit 1
+  fi
+  if mountpoint "${KEY_BUILD_APK_MOUNT_POINT_PUB}" ; then
+    if [[ ! -L "${KEY_BUILD_APK_PUB}" || "$(readlink "${KEY_BUILD_APK_PUB}")" != "${KEY_BUILD_APK_MOUNT_POINT_PUB}" ]]; then
+      echo "'apk public key' link does not exist, creating"
+      rm -rf "${KEY_BUILD_APK_PUB}" || true
+      ln -sf "${KEY_BUILD_APK_MOUNT_POINT_PUB}" "${KEY_BUILD_APK_PUB}"
+    fi
+  else
+    echo "::error::'${KEY_BUILD_APK_MOUNT_POINT_PUB}' not mounted!" >&2
+    exit 1
+  fi
+}
+
 if [ -z "${OPENWRT_COMPILE_DIR}" ] || [ -z "${OPENWRT_CUR_DIR}" ] || [ -z "${OPENWRT_SOURCE_DIR}" ]; then
   echo "::error::'OPENWRT_COMPILE_DIR', 'OPENWRT_CUR_DIR' or 'OPENWRT_SOURCE_DIR' is empty" >&2
   exit 1
@@ -67,6 +95,7 @@ if [ "x${TEST}" = "x1" ]; then
   mkdir -p "${OPENWRT_COMPILE_DIR}" || true
   link_bin
   link_key
+  link_apk_key
   exit 0
 fi
 
@@ -89,3 +118,4 @@ fi
 
 link_bin
 link_key
+link_apk_key
