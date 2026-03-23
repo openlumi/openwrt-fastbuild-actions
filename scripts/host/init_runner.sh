@@ -164,6 +164,7 @@ check_validity() {
 prepare_dirs() {
   mkdir -p "${HOST_WORK_DIR}/keys"
   mkdir -p "${HOST_BIN_DIR}"
+  touch "${HOST_KEY_BUILD}" "${HOST_KEY_BUILD_PUB}" "${HOST_APK_KEY_BUILD}" "${HOST_APK_KEY_BUILD_PUB}"
   chmod 777 "${HOST_BIN_DIR}"
   sudo mkdir "${HOST_TMP_DIR}"
   sudo chmod 777 "${HOST_TMP_DIR}"

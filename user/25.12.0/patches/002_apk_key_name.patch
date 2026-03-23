@@ -1,0 +1,7 @@
+--- rules.mk
++++ rules.mk
+@@ -295,3 +295,3 @@
+ BUILD_KEY=$(TOPDIR)/key-build
+ BUILD_KEY_APK_SEC=$(TOPDIR)/private-key.pem
+-BUILD_KEY_APK_PUB=$(TOPDIR)/public-key.pem
++BUILD_KEY_APK_PUB=$(TOPDIR)/openlumi.pem

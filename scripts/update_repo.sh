@@ -55,7 +55,7 @@ link_key() {
 
 link_apk_key() {
   local KEY_BUILD_APK_SEC="${OPENWRT_COMPILE_DIR}/private-key.pem"
-  local KEY_BUILD_APK_PUB="${OPENWRT_COMPILE_DIR}/public-key.pem"
+  local KEY_BUILD_APK_PUB="${OPENWRT_COMPILE_DIR}/openlumi.pem"
   local KEY_BUILD_APK_MOUNT_POINT="${BUILDER_APK_KEY_BUILD}"
   local KEY_BUILD_APK_MOUNT_POINT_PUB="${BUILDER_APK_KEY_BUILD_PUB}"
 
