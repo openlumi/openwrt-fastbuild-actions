@@ -32,20 +32,20 @@ link_key() {
   local KEY_BUILD_MOUNT_POINT_PUB="${BUILDER_KEY_BUILD_PUB}"
 
   if mountpoint "${KEY_BUILD_MOUNT_POINT}" ; then
-    if [[ ! -L "${KEY_BUILD}" || "$(readlink "${KEY_BUILD}")" != "${KEY_BUILD_MOUNT_POINT}" ]]; then
-      echo "'bin' link does not exist, creating"
+    if ! cmp -s "${KEY_BUILD_MOUNT_POINT}" "${KEY_BUILD}" 2>/dev/null; then
+      echo "Copying package signing key"
       rm -rf "${KEY_BUILD}" || true
-      ln -sf "${KEY_BUILD_MOUNT_POINT}" "${KEY_BUILD}"
+      cp -fL "${KEY_BUILD_MOUNT_POINT}" "${KEY_BUILD}"
     fi
   else
     echo "::error::'${KEY_BUILD_MOUNT_POINT}' not mounted!" >&2
     exit 1
   fi
   if mountpoint "${KEY_BUILD_MOUNT_POINT_PUB}" ; then
-    if [[ ! -L "${KEY_BUILD_PUB}" || "$(readlink "${KEY_BUILD_PUB}")" != "${KEY_BUILD_MOUNT_POINT_PUB}" ]]; then
-      echo "'bin' link does not exist, creating"
+    if ! cmp -s "${KEY_BUILD_MOUNT_POINT_PUB}" "${KEY_BUILD_PUB}" 2>/dev/null; then
+      echo "Copying package signing public key"
       rm -rf "${KEY_BUILD_PUB}" || true
-      ln -sf "${KEY_BUILD_MOUNT_POINT_PUB}" "${KEY_BUILD_PUB}"
+      cp -fL "${KEY_BUILD_MOUNT_POINT_PUB}" "${KEY_BUILD_PUB}"
     fi
   else
     echo "::error::'${KEY_BUILD_MOUNT_POINT_PUB}' not mounted!" >&2
@@ -60,20 +60,20 @@ link_apk_key() {
   local KEY_BUILD_APK_MOUNT_POINT_PUB="${BUILDER_APK_KEY_BUILD_PUB}"
 
   if mountpoint "${KEY_BUILD_APK_MOUNT_POINT}" ; then
-    if [[ ! -L "${KEY_BUILD_APK_SEC}" || "$(readlink "${KEY_BUILD_APK_SEC}")" != "${KEY_BUILD_APK_MOUNT_POINT}" ]]; then
-      echo "'apk private key' link does not exist, creating"
+    if ! cmp -s "${KEY_BUILD_APK_MOUNT_POINT}" "${KEY_BUILD_APK_SEC}" 2>/dev/null; then
+      echo "Copying apk private key"
       rm -rf "${KEY_BUILD_APK_SEC}" || true
-      ln -sf "${KEY_BUILD_APK_MOUNT_POINT}" "${KEY_BUILD_APK_SEC}"
+      cp -fL "${KEY_BUILD_APK_MOUNT_POINT}" "${KEY_BUILD_APK_SEC}"
     fi
   else
     echo "::error::'${KEY_BUILD_APK_MOUNT_POINT}' not mounted!" >&2
     exit 1
   fi
   if mountpoint "${KEY_BUILD_APK_MOUNT_POINT_PUB}" ; then
-    if [[ ! -L "${KEY_BUILD_APK_PUB}" || "$(readlink "${KEY_BUILD_APK_PUB}")" != "${KEY_BUILD_APK_MOUNT_POINT_PUB}" ]]; then
-      echo "'apk public key' link does not exist, creating"
+    if ! cmp -s "${KEY_BUILD_APK_MOUNT_POINT_PUB}" "${KEY_BUILD_APK_PUB}" 2>/dev/null; then
+      echo "Copying apk public key"
       rm -rf "${KEY_BUILD_APK_PUB}" || true
-      ln -sf "${KEY_BUILD_APK_MOUNT_POINT_PUB}" "${KEY_BUILD_APK_PUB}"
+      cp -fL "${KEY_BUILD_APK_MOUNT_POINT_PUB}" "${KEY_BUILD_APK_PUB}"
     fi
   else
     echo "::error::'${KEY_BUILD_APK_MOUNT_POINT_PUB}' not mounted!" >&2
