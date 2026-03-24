@@ -48,6 +48,9 @@ SYNC_EXCLUDES="
 /logs
 *.o
 key-build*
+private-key.pem
+public-key.pem
+openlumi.pem
 "
 declare -a sync_exclude_opts=()
 while IFS= read -r line; do
