@@ -1,0 +1,4 @@
+http://downloads.openwrt.org/releases/25.12.2/packages/arm_cortex-a7_neon-vfpv4/base/packages.adb
+http://downloads.openwrt.org/releases/25.12.2/targets/imx/cortexa7/packages/packages.adb
+http://downloads.openwrt.org/releases/25.12.2/packages/arm_cortex-a7_neon-vfpv4/luci/packages.adb
+http://downloads.openwrt.org/releases/25.12.2/packages/arm_cortex-a7_neon-vfpv4/packages/packages.adb
