@@ -1,0 +1,13 @@
+diff --git tools/elfutils/Makefile tools/elfutils/Makefile
+index 105be07720..1fefa1c177 100644
+--- tools/elfutils/Makefile
++++ tools/elfutils/Makefile
+@@ -19,7 +19,7 @@ PKG_INSTALL:=1
+ 
+ include $(INCLUDE_DIR)/host-build.mk
+ 
+-HOST_CFLAGS +=-std=gnu17
++HOST_CFLAGS +=-std=gnu17 -Wno-error
+ 
+ HOST_CONFIGURE_ARGS += \
+ 	--disable-debuginfod \

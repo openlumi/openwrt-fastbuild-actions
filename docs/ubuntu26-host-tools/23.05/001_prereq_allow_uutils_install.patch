@@ -1,0 +1,13 @@
+diff --git include/prereq-build.mk include/prereq-build.mk
+index 94fc0f8e58..a96a8b7169 100644
+--- include/prereq-build.mk
++++ include/prereq-build.mk
+@@ -169,7 +169,7 @@ $(eval $(call SetupHostCommand,wget,Please install GNU 'wget', \
+ 	wget --version | grep GNU))
+ 
+ $(eval $(call SetupHostCommand,install,Please install GNU 'install', \
+-	install --version | grep GNU, \
++	install --version | grep 'GNU\|uutils', \
+ 	ginstall --version | grep GNU))
+ 
+ $(eval $(call SetupHostCommand,perl,Please install Perl 5.x, \
