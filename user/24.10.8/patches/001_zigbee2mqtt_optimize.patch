@@ -21,8 +21,8 @@
 -	npm_config_nodedir=$(STAGING_DIR)/usr/ \
 -	$(if $(CONFIG_NODEJS_NPM_KEEP_CACHE), npm_config_cache=$(NPM_CACHE_DIR)/npm-cache-$(PKG_NPM_NAME),npm_config_cache=$(TMP_DIR)/npm-cache-$(TMPNPM)) \
 -	npm install --prefer-offline --no-audit --global-style --install-strategy=shallow --no-save --omit=dev --no-package-lock --build-from-source --target_arch=$(NODEJS_CPU) --prefer-dedupe --legacy-peer-deps
-+	$(NPM_FLAGS) npm i --package-lock-only --prefix=$(PKG_BUILD_DIR)
-+	$(NPM_FLAGS) npm i -g --production $(PKG_BUILD_DIR)
++	$(NPM_FLAGS) npm i --package-lock-only --legacy-peer-deps --prefix=$(PKG_BUILD_DIR)
++	$(NPM_FLAGS) npm i -g --production --legacy-peer-deps $(PKG_BUILD_DIR)
 +	$(NPM_FLAGS) npm ci --production --prefix=$(PKG_BUILD_DIR) --target_arch=$(NODEJS_CPU) --prefer-dedupe --legacy-peer-deps
 +	rm -rf $(PKG_BUILD_DIR)/node_modules/@serialport/bindings-cpp/prebuilds
 +	rm -rf $(PKG_BUILD_DIR)/node_modules/{react-icons,@rjsf,react-dom,react-bootstrap}
